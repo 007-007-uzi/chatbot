@@ -9,8 +9,22 @@ jobs:
   keep-alive:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Streamlit App
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Ping Streamlit App using Python
         run: |
-          echo "Waking up Streamlit app..."
-          curl -s -o /dev/null -w "Response Code: %{http_code}\n" https://chatbot-ai-study-buddy-uzi.streamlit.app/
-          echo "Ping successful!"
+          python -c "
+          import urllib.request
+          url = 'https://chatbot-ai-study-buddy-uzi.streamlit.app/'
+          print('Waking up app...')
+          try:
+              req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+              response = urllib.request.urlopen(req)
+              print('Status Code:', response.getcode())
+              print('Ping successful!')
+          except Exception as e:
+              print('Error:', e)
+          "
