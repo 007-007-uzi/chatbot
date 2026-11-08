@@ -1,1 +1,16 @@
+name: Keep Streamlit App Awake
 
+on:
+  schedule:
+    - cron: '*/10 * * * *' 
+  workflow_dispatch: 
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit App
+        run: |
+          echo "Waking up Streamlit app..."
+          curl -s -o /dev/null -w "Response Code: %{http_code}\n" https://chatbot-ai-study-buddy-uzi.streamlit.app/
+          echo "Ping successful!"
